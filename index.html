@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Neural Network</title>
+    <script src="system.js"></script>
+    <script>
+
+        SystemJS.config({
+            baseURL: "/neuralNetwork",
+            defaultJSExtensions: true,
+            map: {
+                d3: './node_modules/d3/build/d3.js',
+
+            },
+            packages: {
+                './': {
+                    defaultExtensions: 'js'
+                }
+            },
+        });
+
+        SystemJS.import('index.js');
+    </script>
+</head>
+<body>
+
+</body>
+</html>
