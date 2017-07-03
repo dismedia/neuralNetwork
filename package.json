@@ -9,7 +9,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/d3": "^4.9.0",
+    "@types/jasmine": "^2.5.53",
     "@types/ws": "^3.0.0",
+    "d3": "^4.9.1",
+    "jasmine": "^2.6.0",
     "ws": "^3.0.0"
+  },
+  "devDependencies": {
+    "karma": "^1.7.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^1.1.0"
   }
 }
