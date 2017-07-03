@@ -34,6 +34,8 @@ export interface INet {
     getLayers(): INeuronLayer[];
     toReadableStructure();
     setInput(values: number[]);
+    getOutput();
+    iterate();
 
 }
 

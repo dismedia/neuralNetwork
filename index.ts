@@ -6,33 +6,23 @@
 import {MultiLayerNet} from "./neuralNetwork/net/multiLayerNet";
 import {linearActivationFunctionFactory} from "./neuralNetwork/activationFunction";
 import {BackPropagationTrainer} from "./neuralNetwork/net/trainer";
-import {MatrixResultRender} from "./neuralNetwork/matrixResultRenderer";
+import {MatrixResultRender} from "./neuralNetwork/vis/matrixResultRenderer";
+import {VisRunner} from "./neuralNetwork/vis/visRunner";
 
 
-const vis=new MatrixResultRender()
-
-
-const matrixDim=100;
-const matrix:Array<number>= []
-for(let i=0;i< matrixDim* matrixDim;i++) matrix.push(Math.random());
-
-setTimeout(()=>{
-    vis.refresh({data:matrix});
-},2000)
-
-
-
-
-
-let p1 = new MultiLayerNet([1,1],linearActivationFunctionFactory(1));
-
+let p1 = new MultiLayerNet([2,2,1],linearActivationFunctionFactory(1));
 let trainer = new BackPropagationTrainer(p1);
 
+const visRunner=new VisRunner(p1);
+trainer.learn([0.1], [0.91]);
+visRunner.update();
 
-for (let k = 0; k < 1000; k++) {
-
-    trainer.learn([0.1], [0.91]);
-    console.log(p1.getOutput());
-
-
-}
+// for (let k = 0; k < 1000; k++) {
+//
+//     trainer.learn([0.1], [0.91]);
+//
+//     visRunner.update();
+//
+//
+//
+// }

@@ -31,17 +31,22 @@ export class Neuron implements INeuron {
         return this.id;
     }
 
-    constructor(af:IActivationFunction,inputs: NeuronInput[] = null) {
+    constructor(af:IActivationFunction=linearActivationFunctionFactory(1),inputs: NeuronInput[] = null) {
 
         this.activation=af;
-
         this.inputs = inputs;
+
+
+
+
         this.id = (Math.random() * 1000).toString(32);
 
         //this.activation = (x) => Math.max(Math.min(x, 1), -1);
 
 
     }
+
+
 
     setValue(value: number) {
         this.value = value;
@@ -53,8 +58,6 @@ export class Neuron implements INeuron {
 
     calculate() {
         let value = this.inputs.map((i: NeuronInput) => i.input.getValue() * i.weight).reduce((a, v) => v + a, 0);
-
-
         this.setValue(this.activation.fx(value));
     }
 }

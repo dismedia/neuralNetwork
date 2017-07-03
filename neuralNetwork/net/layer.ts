@@ -21,8 +21,8 @@ export class FlatLayer implements INeuronLayer {
 
             if (otherLayer) {
                 inputConnections = otherLayer.getNeurons().map((n) => {
-                    return new NeuronInput(n, 0)
-                    //return new NeuronInput(n, Math.random() - 0.5)
+                    //return new NeuronInput(n, 0)
+                    return new NeuronInput(n, Math.random() - 0.5)
                 });
             }
 

@@ -9,19 +9,19 @@ export interface IResultMatrix{
     data:Array<number>;
 }
 
-export class MatrixResultRender{
+export class MatrixResultRender {
     private elements: any;
     private resultLayer:any;
 
-    constructor(){
+    constructor(private matrixDim:number=10){
 
-        const svg = d3.select("body").append("svg").attr("width","300px").attr("height","300px");
+        const svg = d3.select("body").append("svg").attr("width","600px").attr("height","600px");
 
-        const matrixDim=100;
+
         const matrix:Array<number>= []
         for(let i=0;i< matrixDim* matrixDim;i++) matrix.push(Math.random());
 
-        const tileSize=3;
+        const tileSize=50;
 
         this.resultLayer = svg.append("g");
 
@@ -37,6 +37,7 @@ export class MatrixResultRender{
             })
             .attr("x", (d, i) => tileSize*(i%matrixDim))
             .attr("y", (d, i) =>tileSize*(Math.floor(i/matrixDim)))
+            .attr("stroke","white")
             .attr("width", tileSize)
             .attr("height",tileSize);
 

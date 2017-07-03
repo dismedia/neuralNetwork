@@ -5,7 +5,6 @@
 export interface IActivationFunction{
     fx:(x:number)=>number,
     fdx:(x:number)=>number,
-
 }
 
 

@@ -1,46 +1,43 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const activationFunction_1 = require("./neuralNetwork/activationFunction");
 /**
  * Created by disme on 12/06/17.
  */
 function substract(a, b) {
-    for (var i = 0; i < a.length; i++) {
+    for (let i = 0; i < a.length; i++) {
         a[i] -= b[i];
     }
 }
-var Neuron = (function () {
-    function Neuron(af, inputs) {
-        if (inputs === void 0) { inputs = null; }
+class Neuron {
+    constructor(af = activationFunction_1.linearActivationFunctionFactory(1), inputs = null) {
         this.value = 0;
         this.activation = af;
         this.inputs = inputs;
         this.id = (Math.random() * 1000).toString(32);
         //this.activation = (x) => Math.max(Math.min(x, 1), -1);
     }
-    Neuron.prototype.getId = function () {
+    getId() {
         return this.id;
-    };
-    Neuron.prototype.setValue = function (value) {
+    }
+    setValue(value) {
         this.value = value;
-    };
-    Neuron.prototype.getValue = function () {
+    }
+    getValue() {
         return this.value;
-    };
-    Neuron.prototype.calculate = function () {
-        var value = this.inputs.map(function (i) { return i.input.getValue() * i.weight; }).reduce(function (a, v) { return v + a; }, 0);
+    }
+    calculate() {
+        let value = this.inputs.map((i) => i.input.getValue() * i.weight).reduce((a, v) => v + a, 0);
         this.setValue(this.activation.fx(value));
-    };
-    return Neuron;
-}());
+    }
+}
 exports.Neuron = Neuron;
-var NeuronInput = (function () {
-    function NeuronInput(input, weight) {
-        if (weight === void 0) { weight = 0; }
+class NeuronInput {
+    constructor(input, weight = 0) {
         this.input = input;
         this.weight = weight;
     }
-    return NeuronInput;
-}());
+}
 exports.NeuronInput = NeuronInput;
 /*
  for(let i=p1.getLayers().length-1, layer=p1.getLayers()[i];i>0;i--){
