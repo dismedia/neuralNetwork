@@ -1,7 +1,8 @@
 /**
  * Created by Marcin on 02/07/17.
  */
-import * as d3 from "d3"
+import * as d3Selection from "d3-selection"
+import * as d3Color from "d3-color"
 import {keys} from "d3-collection";
 
 export interface IResultMatrix {
@@ -16,7 +17,7 @@ export class MatrixResultRender {
 
     constructor(private matrixDim: number,private trainData: Array<any>) {
 
-        const svg = d3.select("body").append("svg").attr("width", "600px").attr("height", "600px");
+        const svg = d3Selection.select("body").append("svg").attr("width", "600px").attr("height", "600px");
 
         const matrix: Array<number> = []
         for (let i = 0; i < matrixDim * matrixDim; i++) matrix.push(Math.random());
@@ -73,7 +74,7 @@ export class MatrixResultRender {
     }
 
     valueToColor(v: number) {
-        return  v<0.5?d3.hsl(60+v*60, 1, 0.5):d3.hsl(150+v*60, 1, 0.5);
+        return  v<0.5?d3Color.hsl(60+v*60, 1, 0.5):d3Color.hsl(150+v*60, 1, 0.5);
         //return  d3.hsl(180+v*60, 1, 0.5).toString();
         //return d3.hsl(180, 0, v).toString();
     }
