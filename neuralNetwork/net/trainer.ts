@@ -9,7 +9,7 @@ export class BackPropagationTrainer {
     private outputNeurons: INeuron[];
     private neurons: INeuron[];
 
-    private learningRate = 0.22;
+    private learningRate = 0.01;
 
     constructor(private net: MultiLayerNet) {
 

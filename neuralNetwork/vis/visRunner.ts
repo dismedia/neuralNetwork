@@ -9,10 +9,14 @@ export class VisRunner {
     private matrixRenderer: MatrixResultRender;
 
     constructor(private net: INet,
+                private trainData:Array<any>,
                 private matrixDim = 50,
                 private outputTransform: (o: any[]) => number = (a: any[]) => a[0]) {
 
-        this.matrixRenderer = new MatrixResultRender(matrixDim)
+        this.matrixRenderer = new MatrixResultRender(this.matrixDim,trainData)
+
+
+
 
     }
 

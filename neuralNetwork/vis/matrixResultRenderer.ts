@@ -4,26 +4,29 @@
 import * as d3 from "d3"
 import {keys} from "d3-collection";
 
-
-export interface IResultMatrix{
-    data:Array<number>;
+export interface IResultMatrix {
+    data: Array<number>;
 }
 
 export class MatrixResultRender {
+    tileSize: number;
     private elements: any;
-    private resultLayer:any;
+    private resultLayer: any;
+    private trainDataLayer: any;
 
-    constructor(private matrixDim:number=10){
+    constructor(private matrixDim: number,private trainData: Array<any>) {
 
-        const svg = d3.select("body").append("svg").attr("width","600px").attr("height","600px");
+        const svg = d3.select("body").append("svg").attr("width", "600px").attr("height", "600px");
 
+        const matrix: Array<number> = []
+        for (let i = 0; i < matrixDim * matrixDim; i++) matrix.push(Math.random());
 
-        const matrix:Array<number>= []
-        for(let i=0;i< matrixDim* matrixDim;i++) matrix.push(Math.random());
-
-        const tileSize=10;
+        this.tileSize = 10;
 
         this.resultLayer = svg.append("g");
+        this.trainDataLayer = svg.append("g");
+
+        this.updateTrainData();
 
         this.elements = this.resultLayer.selectAll(".result")
             .data(matrix)
@@ -31,35 +34,48 @@ export class MatrixResultRender {
 
         this.elements
             .append("rect")
-            .classed("result",true)
+            .classed("result", true)
             .attr("fill", (d) => {
                 return this.valueToColor(d)
             })
-            .attr("x", (d, i) => tileSize*(i%matrixDim))
-            .attr("y", (d, i) =>tileSize*(Math.floor(i/matrixDim)))
-            .attr("stroke","white")
-            .attr("width", tileSize)
-            .attr("height",tileSize);
-
+            .attr("x", (d, i) => this.tileSize * (i % matrixDim))
+            .attr("y", (d, i) => this.tileSize * (Math.floor(i / matrixDim)))
+            .attr("stroke", "white")
+            .attr("width", this.tileSize)
+            .attr("height", this.tileSize);
 
     }
 
+    updateTrainData() {
 
-    refresh(result:IResultMatrix){
+        this.trainDataLayer.selectAll(".trainData")
+            .data(this.trainData)
+            .enter()
+            .append("circle")
+            .classed("trainData", true)
+            .attr("cx", (d, i) => this.tileSize * d[0][0] * this.matrixDim)
+            .attr("cy", (d, i) => this.tileSize * d[0][1] * this.matrixDim)
+
+            .attr("stroke", "red")
+            .attr("r", 3)
+            .attr("fill", (d) => {
+                return this.valueToColor(d[1]);
+            })
+    }
+
+    refresh(result: IResultMatrix) {
         this.resultLayer.selectAll(".result")
             .data(result.data)
             .attr("fill", (d) => {
                 return this.valueToColor(d)
             })
 
-
-
     }
 
-
-    valueToColor(v:number ){
-       //return  d3.hsl(180+v*30, 1, 0.5).toString();
-       return  d3.hsl(180,0, v).toString();
+    valueToColor(v: number) {
+        return  v<0.5?d3.hsl(60+v*60, 1, 0.5):d3.hsl(150+v*60, 1, 0.5);
+        //return  d3.hsl(180+v*60, 1, 0.5).toString();
+        //return d3.hsl(180, 0, v).toString();
     }
 
 }
