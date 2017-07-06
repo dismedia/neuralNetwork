@@ -7,7 +7,8 @@ import {IActivationFunction} from "../activationFunction";
 export interface INeuronInput{
     neuron: INeuron,
     weight:number,
-    learningData: any;
+
+
 
 }
 
@@ -17,6 +18,7 @@ export interface INeuron {
     calculate();
     getId(): string;
 
+    supportWeight:number;
     inputSignal:number;
     inputs: INeuronInput[];
     activation: IActivationFunction

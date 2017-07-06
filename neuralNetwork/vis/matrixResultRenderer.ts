@@ -21,7 +21,7 @@ export class MatrixResultRender {
         const matrix:Array<number>= []
         for(let i=0;i< matrixDim* matrixDim;i++) matrix.push(Math.random());
 
-        const tileSize=50;
+        const tileSize=10;
 
         this.resultLayer = svg.append("g");
 
@@ -58,7 +58,8 @@ export class MatrixResultRender {
 
 
     valueToColor(v:number ){
-       return  d3.hsl(180+v*180, 1, 0.5).toString();
+       //return  d3.hsl(180+v*30, 1, 0.5).toString();
+       return  d3.hsl(180,0, v).toString();
     }
 
 }

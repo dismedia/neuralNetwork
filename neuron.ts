@@ -5,15 +5,6 @@ import {MultiLayerNet} from "./neuralNetwork/net/multiLayerNet";
  * Created by disme on 12/06/17.
  */
 
-function substract(a: number[], b: number[]) {
-
-    for (let i = 0; i < a.length; i++) {
-        a[i] -= b[i];
-    }
-
-}
-
-
 
 
 
@@ -21,6 +12,7 @@ function substract(a: number[], b: number[]) {
 
 export class Neuron implements INeuron {
     learningData: any;
+    supportWeight:number;
     inputs: INeuronInput[];
     activation: IActivationFunction;
     public value: number = 0;
@@ -40,6 +32,8 @@ export class Neuron implements INeuron {
         this.inputs = inputs;
 
         this.id = (Math.random() * 1000).toString(32);
+
+        this.supportWeight=Math.random()-0.5;
 
     }
 
@@ -65,6 +59,9 @@ export class Neuron implements INeuron {
         if(!this.inputs) return;
 
         this.inputSignal = this.inputs.map((i: NeuronInput) => i.neuron.getValue() * i.weight).reduce((a, v) => v + a, 0);
+
+        this.inputSignal+=this.supportWeight;
+
         this.setValue(this.activation.fx(this.inputSignal));
     }
 }

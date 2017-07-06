@@ -14,7 +14,7 @@ export class MultiLayerNet implements INet {
         if (neurons.length != values.length) return;
 
         this.layers[0].getNeurons().forEach((n, i) => {
-            n.setValue(values[i])
+            n.setInputSignal(values[i])
         });
 
     }

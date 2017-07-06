@@ -4,11 +4,6 @@ const activationFunction_1 = require("./neuralNetwork/activationFunction");
 /**
  * Created by disme on 12/06/17.
  */
-function substract(a, b) {
-    for (let i = 0; i < a.length; i++) {
-        a[i] -= b[i];
-    }
-}
 class Neuron {
     constructor(af = activationFunction_1.linearActivationFunctionFactory(1), inputs = null) {
         this.value = 0;
@@ -16,6 +11,7 @@ class Neuron {
         this.activation = af;
         this.inputs = inputs;
         this.id = (Math.random() * 1000).toString(32);
+        this.supportWeight = Math.random() - 0.5;
     }
     getId() {
         return this.id;
@@ -34,6 +30,7 @@ class Neuron {
         if (!this.inputs)
             return;
         this.inputSignal = this.inputs.map((i) => i.neuron.getValue() * i.weight).reduce((a, v) => v + a, 0);
+        this.inputSignal += this.supportWeight;
         this.setValue(this.activation.fx(this.inputSignal));
     }
 }

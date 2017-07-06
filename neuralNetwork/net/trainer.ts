@@ -9,7 +9,7 @@ export class BackPropagationTrainer {
     private outputNeurons: INeuron[];
     private neurons: INeuron[];
 
-    private learningRate = 0.42;
+    private learningRate = 0.22;
 
     constructor(private net: MultiLayerNet) {
 
@@ -73,11 +73,6 @@ export class BackPropagationTrainer {
         let lastLayerSumError=0;
 
 
-
-
-
-
-
         layers[currentLayer].getNeurons().forEach((n, index) => {
             lastLayerSumError+=this.addLastLayerError(n, desiredOutput[index] - output[index])
         });
@@ -97,6 +92,7 @@ export class BackPropagationTrainer {
                 n.inputs.forEach(ni=>{
 
                     ni.weight+=ni.neuron.getValue()*n.learningData.err*this.learningRate;
+                    n.supportWeight+=n.learningData.err*this.learningRate;
 
                 })
             }
