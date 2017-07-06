@@ -15,7 +15,8 @@ import {INeuronInput} from "./neuralNetwork/net/abstract";
 
 
 //let p1 = new MultiLayerNet([2,1],linearActivationFunctionFactory(1));
-let p1 = new MultiLayerNet([2,20,1],bipolarLogisticActivationFunctionFactory(1));
+let p1 = new MultiLayerNet([2,8,1],bipolarLogisticActivationFunctionFactory(1));
+//let p1 = new MultiLayerNet([2,4,1],logisticActivationFunctionFactory(1));
 
 
 // const n10=p1.getLayers()[1].getNeurons()[0];
@@ -28,40 +29,36 @@ let p1 = new MultiLayerNet([2,20,1],bipolarLogisticActivationFunctionFactory(1))
 
 
 
-console.log(p1.getOutput());
-
-const visRunner=new VisRunner(p1);
-visRunner.update();
-
 const trainer=new BackPropagationTrainer(p1);
 
 
 
 let trainData=[
-    [[0.0,0.0],[0]],
-    [[1.0,0.0],[0]],
-    [[0.0,1.0],[0]],
-    [[1.0,1.0],[0]],
-    [[0.5,0.5],[1]],
-    [[0.6,0.6],[1]],
-    [[0.4,0.4],[1]],
-    [[0.2,0.2],[0]],
-    [[0.8,0.2],[0]],
-    [[0.2,0.8],[0]],
-    [[0.8,0.8],[0]],
-
-
-
-
-
-    // [[0.0,1.0],[0.0]],
-    // [[1.0,1.0],[1.0]],
-    // [[0.8,1.0],[1.0]],
-
 
 ];
 
 
+for(let i=0;i<1500;i++){
+
+    let x=Math.random();
+    let y=Math.random();
+
+    let v=1;
+
+    if((x<0.5 && y< 0.5)||(x>0.5 && y>0.5)) v=0;
+
+    trainData.push([[x,y],[v]]);
+
+
+}
+
+
+
+const visRunner=new VisRunner(p1,trainData);
+
+console.log(trainData.sort((a,b)=>{
+    return a[1][0]-b[1][0];
+}).map((g)=>[g[1][0],g[0][0],g[0][1]]));
 
 
 
@@ -75,23 +72,23 @@ setInterval(()=>{
 
     visRunner.update();
 
-    let error=trainData.map(data=>{
+    // let error=trainData.map(data=>{
+    //
+    //     p1.setInput(data[0]);
+    //     p1.iterate();
+    //     let o=p1.getOutput();
+    //
+    //
+    //    console.log(data[0],data[1][0],o[0])
+    //
+    //    return Math.pow(data[1][0]-o[0],2)
+    //
+    // }).reduce((a,err)=>{
+    //     return a+err
+    // })
 
-        p1.setInput(data[0]);
-        p1.iterate();
-        let o=p1.getOutput();
 
 
-       console.log(data[0],data[1][0],o[0])
-
-       return Math.pow(data[1][0]-o[0],2)
-
-    }).reduce((a,err)=>{
-        return a+err
-    })
-
-
-    console.log(p1.getLayers()[1].getNeurons()[0].inputs[0].weight);
 
 
 
