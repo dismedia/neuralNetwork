@@ -56,7 +56,7 @@ export class MatrixResultRender {
             .attr("cx", (d, i) => this.tileSize * d[0][0] * this.matrixDim)
             .attr("cy", (d, i) => this.tileSize * d[0][1] * this.matrixDim)
 
-            .attr("stroke", "red")
+            .attr("stroke", "black")
             .attr("r", 3)
             .attr("fill", (d) => {
                 return this.valueToColor(d[1]);

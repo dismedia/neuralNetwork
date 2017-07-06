@@ -15,7 +15,7 @@ import {INeuronInput} from "./neuralNetwork/net/abstract";
 
 
 //let p1 = new MultiLayerNet([2,1],linearActivationFunctionFactory(1));
-let p1 = new MultiLayerNet([2,8,1],bipolarLogisticActivationFunctionFactory(1));
+let p1 = new MultiLayerNet([2,20,1],bipolarLogisticActivationFunctionFactory(1));
 //let p1 = new MultiLayerNet([2,4,1],logisticActivationFunctionFactory(1));
 
 
@@ -46,6 +46,8 @@ for(let i=0;i<1500;i++){
     let v=1;
 
     if((x<0.5 && y< 0.5)||(x>0.5 && y>0.5)) v=0;
+
+    if((x>0.8 && y> 0.8)||(x<0.2 && y<0.2)) v=1;
 
     trainData.push([[x,y],[v]]);
 

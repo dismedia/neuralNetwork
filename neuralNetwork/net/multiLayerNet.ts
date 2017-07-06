@@ -1,5 +1,5 @@
 import {INet, INeuronLayer} from "./abstract";
-import {IActivationFunction} from "../activationFunction";
+import {IActivationFunction, linearActivationFunctionFactory} from "../activationFunction";
 import {FlatLayer} from "./layer";
 /**
  * Created by Marcin on 02/07/17.
@@ -35,7 +35,11 @@ export class MultiLayerNet implements INet {
         this.layers = [];
 
         let lastLayer = null;
-        for (let i = 0; i < layerSizes.length; i++) {
+
+        this.layers.push(new FlatLayer(layerSizes[0],linearActivationFunctionFactory(1), lastLayer));
+        lastLayer = this.layers[this.layers.length - 1];
+
+        for (let i = 1; i < layerSizes.length; i++) {
 
             this.layers.push(new FlatLayer(layerSizes[i],af, lastLayer));
             lastLayer = this.layers[this.layers.length - 1];

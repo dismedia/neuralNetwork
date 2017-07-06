@@ -4,8 +4,10 @@ working multi layer neural network playground
 
 TODO:
 
+*  bundle!
+
 * refactor
-*  learning rate
+* learning rate
 * webworker
 * gui improvement
 * improve testability / tests
