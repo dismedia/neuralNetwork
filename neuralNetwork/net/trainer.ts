@@ -1,4 +1,4 @@
-import {INeuron} from "./abstract";
+import {INeuron, INeuronInput} from "./abstract";
 import {MultiLayerNet} from "./multiLayerNet";
 /**
  * Created by Marcin on 02/07/17.
@@ -9,69 +9,97 @@ export class BackPropagationTrainer {
     private outputNeurons: INeuron[];
     private neurons: INeuron[];
 
-    private learningRate = 0.01;
+    private learningRate = 0.42;
 
     constructor(private net: MultiLayerNet) {
 
         this.neurons = [];
 
-        net.getLayers().forEach(l => {
+       this.resetErrors();
+
+       this.neurons=this.neurons.concat(...net.getLayers().map(l=>l.getNeurons()))
+
+       this.outputNeurons = net.getLayers()[net.getLayers().length - 1].getNeurons();
+
+    }
+
+    private resetErrors(){
+        this.net.getLayers().forEach((l) => {
             let layerNeurons = l.getNeurons();
 
-            this.neurons = this.neurons.concat(layerNeurons);
-            layerNeurons.forEach(n => {
+            layerNeurons.forEach((n: INeuron) => {
+
                 n.learningData = {
                     err: 0
                 }
             })
-        })
+        });
+    }
 
-        this.outputNeurons = net.getLayers()[net.getLayers().length - 1].getNeurons();
+    private  addError(n: INeuron, connectedNeuronError: number, weight) {
+
+        n.learningData.err += n.activation.fdx(n.inputSignal) * weight * (connectedNeuronError);
+
+
 
     }
 
-    private addError(n: INeuron, desiredValue: number) {
+    private addLastLayerError(n: INeuron, desiredValue: number):number {
 
-        n.learningData.err += (n.getValue() - desiredValue)
+
+
+        n.learningData.err = n.activation.fdx(n.inputSignal) * (desiredValue);
 
         if (!n.inputs) return;
 
-        n.inputs.forEach(ni => {
 
-            this.addError(ni.input, desiredValue / ni.weight)
 
-        })
+        return desiredValue - n.getValue();
 
     }
 
-    learn(input: number[], output: number[]) {
+    learn(input: number[], desiredOutput: number[]) {
 
 
-        this.neurons.forEach(n => {
-            n.learningData.err = 0;
-
-        });
-
-
-
+        this.resetErrors();
 
         this.net.setInput(input);
         this.net.iterate();
+        const output = this.net.getOutput();
 
-        this.outputNeurons.forEach((n, i) => this.addError(n, output[i]));
+        const layers = this.net.getLayers();
+        let currentLayer = layers.length - 1;
 
-        console.log(JSON.stringify(this.net.toReadableStructure()));
-
-        this.neurons.forEach(n => {
+        let lastLayerSumError=0;
 
 
-            (n.inputs || []).forEach(i => {
-                let di = (-n.learningData.err + i.input.getValue() * i.weight) / i.input.getValue() - i.weight;
 
-                di *= this.learningRate;
 
-                i.weight += di;
-            })
+
+
+
+        layers[currentLayer].getNeurons().forEach((n, index) => {
+            lastLayerSumError+=this.addLastLayerError(n, desiredOutput[index] - output[index])
+        });
+
+        for (currentLayer; currentLayer > 0; currentLayer--) {
+            layers[currentLayer].getNeurons().forEach((n) => n.inputs.forEach((ni: INeuronInput) => {
+               this.addError(ni.neuron, n.learningData.err, ni.weight)
+            }))
+        }
+
+
+        //console.log(lastLayerSumError);
+
+        this.neurons.forEach(n=>{
+
+            if(n.inputs){
+                n.inputs.forEach(ni=>{
+
+                    ni.weight+=ni.neuron.getValue()*n.learningData.err*this.learningRate;
+
+                })
+            }
 
         })
 

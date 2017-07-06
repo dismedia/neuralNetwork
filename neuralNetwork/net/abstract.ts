@@ -5,20 +5,22 @@ import {IActivationFunction} from "../activationFunction";
 
 
 export interface INeuronInput{
-    input: INeuron,
-    weight:number
+    neuron: INeuron,
+    weight:number,
+    learningData: any;
 
 }
 
 export interface INeuron {
-    setValue(value: number);
+    setInputSignal(value: number);
     getValue(): number;
     calculate();
     getId(): string;
-    learningData: any;
-    inputs: INeuronInput[];
 
+    inputSignal:number;
+    inputs: INeuronInput[];
     activation: IActivationFunction
+    learningData: any;
 
 }
 

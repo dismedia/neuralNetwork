@@ -20,12 +20,15 @@ function substract(a: number[], b: number[]) {
 
 
 export class Neuron implements INeuron {
+    learningData: any;
     inputs: INeuronInput[];
     activation: IActivationFunction;
     public value: number = 0;
+    public inputSignal:number=0;
+
     public id: string;
 
-    public learningData;
+
 
     getId(): string {
         return this.id;
@@ -36,19 +39,20 @@ export class Neuron implements INeuron {
         this.activation=af;
         this.inputs = inputs;
 
-
-
-
         this.id = (Math.random() * 1000).toString(32);
-
-        //this.activation = (x) => Math.max(Math.min(x, 1), -1);
-
 
     }
 
 
 
-    setValue(value: number) {
+    setInputSignal(value){
+
+        this.inputSignal=value;
+        this.setValue(this.activation.fx(this.inputSignal));
+
+    }
+
+    private setValue(value: number) {
         this.value = value;
     }
 
@@ -57,8 +61,11 @@ export class Neuron implements INeuron {
     }
 
     calculate() {
-        let value = this.inputs.map((i: NeuronInput) => i.input.getValue() * i.weight).reduce((a, v) => v + a, 0);
-        this.setValue(this.activation.fx(value));
+
+        if(!this.inputs) return;
+
+        this.inputSignal = this.inputs.map((i: NeuronInput) => i.neuron.getValue() * i.weight).reduce((a, v) => v + a, 0);
+        this.setValue(this.activation.fx(this.inputSignal));
     }
 }
 
@@ -66,7 +73,8 @@ export class Neuron implements INeuron {
 
 export class NeuronInput implements INeuronInput {
 
-    constructor(public input: INeuron, public weight: number = 0) {
+    public learningData:any=null;
+    constructor(public neuron: INeuron, public weight: number = 0) {
 
     }
 }

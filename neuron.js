@@ -12,13 +12,17 @@ function substract(a, b) {
 class Neuron {
     constructor(af = activationFunction_1.linearActivationFunctionFactory(1), inputs = null) {
         this.value = 0;
+        this.inputSignal = 0;
         this.activation = af;
         this.inputs = inputs;
         this.id = (Math.random() * 1000).toString(32);
-        //this.activation = (x) => Math.max(Math.min(x, 1), -1);
     }
     getId() {
         return this.id;
+    }
+    setInputSignal(value) {
+        this.inputSignal = value;
+        this.setValue(this.activation.fx(this.inputSignal));
     }
     setValue(value) {
         this.value = value;
@@ -27,15 +31,18 @@ class Neuron {
         return this.value;
     }
     calculate() {
-        let value = this.inputs.map((i) => i.input.getValue() * i.weight).reduce((a, v) => v + a, 0);
-        this.setValue(this.activation.fx(value));
+        if (!this.inputs)
+            return;
+        this.inputSignal = this.inputs.map((i) => i.neuron.getValue() * i.weight).reduce((a, v) => v + a, 0);
+        this.setValue(this.activation.fx(this.inputSignal));
     }
 }
 exports.Neuron = Neuron;
 class NeuronInput {
-    constructor(input, weight = 0) {
-        this.input = input;
+    constructor(neuron, weight = 0) {
+        this.neuron = neuron;
         this.weight = weight;
+        this.learningData = null;
     }
 }
 exports.NeuronInput = NeuronInput;
